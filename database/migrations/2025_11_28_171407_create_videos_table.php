@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('source_url');      // provided URL
             $table->string('downloaded_file'); // saved file path
             $table->integer('size')->nullable();
+            $table->string('slug')->unique();
             $table->string('platform')->nullable(); // youtube / vimeo / custom
             $table->timestamps();
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Visitor;
+use App\Models\VideoCategory;
 use Carbon\Carbon;
 
 class VisitorController extends Controller
@@ -39,7 +40,6 @@ class VisitorController extends Controller
         ]);
     }
 
-
     public function totalVisitors()
     {
         return response()->json([
@@ -60,6 +60,21 @@ class VisitorController extends Controller
         }
 
         return $ip;
+    }
+
+    function landing_page(Request $Request){
+
+        $category =  VideoCategory::select( 'name','slug','icon')->get();
+         return view('landing', compact('category'));
+    }
+
+    function categoryWise(Request $request){
+
+        $category = VideoCategory::where('slug', $slug)->firstOrFail();
+        $videos = Video::where('category_id', $category->id)->get();
+
+        return view('videos.category', compact('category', 'videos'));
+
     }
 
 }
