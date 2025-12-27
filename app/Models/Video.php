@@ -6,5 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Video extends Model
 {
-    //
+   protected $table = 'videos';
+
+    protected $fillable = [
+        'user_id',
+        'title',
+        'source_url',
+        'downloaded_file',
+        'size',
+        'slug',
+        'platform'
+    ];
 }
