@@ -12,9 +12,10 @@ class Video extends Model
         'user_id',
         'title',
         'source_url',
-        'downloaded_file',
+        'video',
         'size',
         'slug',
-        'platform'
+        'platform',
+        'category'
     ];
 }

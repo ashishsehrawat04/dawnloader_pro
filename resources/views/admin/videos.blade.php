@@ -64,22 +64,15 @@
                             <select name="category_id" class="form-select form-select-lg">
                                 <option value="">Select Category</option>
                                 @foreach($categories as $id => $slug)
-                                    <option value="{{ $id }}" {{ old('category_id') == $id ? 'selected' : '' }}>{{ $slug }}</option>
+                                    <option value="{{ $slug }}" {{ old('category_id') == $id ? 'selected' : '' }}>{{ $slug }}</option>
                                 @endforeach
                             </select>
                         </div>
 
 
                         <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Size (MB)</label>
-                                <input type="number" name="size"
-                                       class="form-control"
-                                       value="{{ old('size') }}"
-                                       placeholder="120">
-                            </div>
 
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-12 mb-3">
                                 <label class="form-label">Platform</label>
                                 <select name="platform" class="form-select">
                                     <option value="">Select Platform</option>

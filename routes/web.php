@@ -18,7 +18,7 @@ Route::get('/category/{slug}', [videoCategoryController::class, 'category']);
 Route::get('/admin', [AdminController::class, 'login_page']);
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard']);
 Route::get('/admin/videos', [AdminController::class, 'Videos'])->name('videos');
-Route::get('/admin/add_videos', [AdminController::class, 'addVideos'])->name('videos.store');
+Route::post('/admin/add_videos', [AdminController::class, 'addVideos'])->name('videos.store');
 
 Route::get('/api/otp-verify', [ApiController::class, 'verifyOtp'])->name('otp.verify');
 Route::get('/api/submit', [ApiController::class, 'submitlogin'])->name('submit.login');
