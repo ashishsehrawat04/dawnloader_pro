@@ -12,7 +12,7 @@ use App\Http\Controllers\ApiController;
 Route::get('/', [VisitorController::class, 'landing_page']);
 Route::get('/track-visitor', [VisitorController::class, 'track']);
 Route::get('/visitors/count', [VisitorController::class, 'totalVisitors']);
-Route::get('/category/{slug}', [videoCategoryController::class, 'category']);
+Route::get('/category/{category}', [videoCategoryController::class, 'category']);
 
 
 Route::get('/admin', [AdminController::class, 'login_page']);
@@ -21,6 +21,6 @@ Route::get('/admin/videos', [AdminController::class, 'Videos'])->name('videos');
 Route::post('/admin/add_videos', [AdminController::class, 'addVideos'])->name('videos.store');
 
 Route::get('/api/otp-verify', [ApiController::class, 'verifyOtp'])->name('otp.verify');
-Route::get('/api/submit', [ApiController::class, 'submitlogin'])->name('submit.login');
+Route::get('/api/submit', [ApiController::class, 'submitlogin'])->name('submit.login');  
 
 
