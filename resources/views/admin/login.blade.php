@@ -292,8 +292,7 @@ $(document).ready(function(){
         url: "{{ route('otp.verify') }}",
         type: "GET",
         data: {
-            username: $("#username").val(),
-
+            email: $("#username").val(),
         },
         success: function (response) {
 

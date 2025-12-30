@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Video;
+use App\Models\User;
 use App\Models\VideoCategory;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -16,63 +17,66 @@ class AdminController extends Controller
     }
 
     public function dashboard(Request $request){
-        return view('admin.dashboard');
+
+        $user = User::where('email', "ashishkumarjjr@gmail.com")->first();
+
+        return view('admin.dashboard', compact('user'));
     }
 
-public function addvideos(Request $request)
-{
-    // // ✅ Validation
-    // $request->validate([
-    //     'title' => 'required|string|max:255',
-    //     'source_url' => 'required|url',
-    //     'downloaded_file' => 'required|file|mimes:mp4,mkv,avi|max:51200',
-    //     'category_id' => 'nullable|string',
-    //     'platform' => 'nullable|string',
-    // ]);
+    public function addvideos(Request $request)
+    {
+        // // ✅ Validation
+        // $request->validate([
+        //     'title' => 'required|string|max:255',
+        //     'source_url' => 'required|url',
+        //     'downloaded_file' => 'required|file|mimes:mp4,mkv,avi|max:51200',
+        //     'category_id' => 'nullable|string',
+        //     'platform' => 'nullable|string',
+        // ]);
 
-    try {
+        try {
 
-        // 📁 upload folder
-       $folder = 'uploads/videos';
+            // 📁 upload folder
+        $folder = 'uploads/videos';
 
-        $file = $request->file('downloaded_file');
+            $file = $request->file('downloaded_file');
 
-          $size = $file->getSize();
-
-
-        $filename = time() . '_.mp4';
-        $file->move(public_path($folder), $filename);
-        $path = $folder . '/' . $filename;
+            $size = $file->getSize();
 
 
-        // 🧾 save DB
-        Video::create([
-            'user_id'    => 1,   // ❌ never hardcode
-            'title'      => $request->title,
-            'source_url' => $request->source_url,
-            'video'      => $path,
-            'category'   => $request->category_id,
-            'size'       => $size,
-            'slug'       => Str::slug($request->title),
-            'platform'   => $request->platform,
-        ]);
+            $filename = time() . '_.mp4';
+            $file->move(public_path($folder), $filename);
+            $path = $folder . '/' . $filename;
 
-        // ✅ SUCCESS → back to blade
-        return redirect()
-            ->back()
-            ->with('success', 'Video uploaded successfully 🎉');
 
-    } catch (\Exception $e) {
+            // 🧾 save DB
+            Video::create([
+                'user_id'    => 1,
+                'title'      => $request->title,
+                'source_url' => $request->source_url,
+                'video'      => $path,
+                'category'   => $request->category_id,
+                'size'       => $size,
+                'slug'       => Str::slug($request->title),
+                'platform'   => $request->platform,
+            ]);
 
-        // ❌ log error (optional)
-        Log::error($e->getMessage());
+            // ✅ SUCCESS → back to blade
+            return redirect()
+                ->back()
+                ->with('success', 'Video uploaded successfully 🎉');
 
-        return redirect()
-            ->back()
-            ->withInput()
-            ->withErrors(['error' => $e->getMessage()]);
+        } catch (\Exception $e) {
+
+            // ❌ log error (optional)
+            Log::error($e->getMessage());
+
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors(['error' => $e->getMessage()]);
+        }
     }
-}
 
     // public function addvideos(Request $request)
     // {

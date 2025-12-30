@@ -24,7 +24,7 @@
     </style>
 </head>
 
-<body class="bg-gray-100 text-gray-800">
+<body  style="">
 
     <!-- NAVBAR -->
     <nav class="bg-white shadow-md fixed w-full z-50">
@@ -52,9 +52,9 @@
                 Fast • Free • Unlimited video downloads for everyone
             </p>
 
-            <form action="/download" method="POST" class="max-w-2xl mx-auto bg-white rounded-xl p-4 flex">
+            <form id="urlDwonloaderForm" class="max-w-2xl mx-auto bg-white rounded-xl p-4 flex">
                 @csrf
-                <input type="text" name="url" placeholder="Paste your video link here..."
+                <input type="text" name="url" id="url-video-download" placeholder="Paste your video link here..."
                        class="w-full outline-none px-4 rounded-l-lg text-gray-700" required>
 
                 <button class="bg-indigo-600 hover:bg-indigo-700 px-6 py-3 rounded-r-lg text-white font-semibold">
@@ -196,4 +196,34 @@
         .then(res => res.json())
         .then(data => console.log("Visitor Tracked:", data));
 </script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+$('#videoDownloadForm').on('submit', function (e) {
+    e.preventDefault();
+
+    let videoUrl = $('#url-video-download').val();
+
+    $.ajax({
+        url: "{{ route('video.url-video-download') }}", // Laravel route
+        type: "POST",
+        data: {
+            url: videoUrl,
+            _token: "{{ csrf_token() }}"
+        },
+        beforeSend: function () {
+            console.log('Processing...');
+        },
+        success: function (response) {
+            console.log(response);
+            alert('Download started');
+        },
+        error: function (xhr) {
+            alert('Something went wrong');
+        }
+    });
+});
+</script>
+
 

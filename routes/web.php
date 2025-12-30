@@ -5,6 +5,7 @@ use App\Http\Controllers\VisitorController;
 use App\Http\Controllers\videoCategoryController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\VideoDownloaderController;
 
 
 
@@ -20,7 +21,10 @@ Route::get('/admin/dashboard', [AdminController::class, 'dashboard']);
 Route::get('/admin/videos', [AdminController::class, 'Videos'])->name('videos');
 Route::post('/admin/add_videos', [AdminController::class, 'addVideos'])->name('videos.store');
 
-Route::get('/api/otp-verify', [ApiController::class, 'verifyOtp'])->name('otp.verify');
-Route::get('/api/submit', [ApiController::class, 'submitlogin'])->name('submit.login');  
+Route::get('/api/otp-verify', [ApiController::class, 'sendOtp'])->name('otp.verify');
+Route::get('/api/submit', [ApiController::class, 'submitlogin'])->name('submit.login');
+
+Route::get('/video-download', [VideoDownloaderController::class, 'downloadVideo'])->name('video.url-video-download');
+
 
 
