@@ -21,12 +21,12 @@
   <!-- inject:css -->
   <link rel="stylesheet" href="{{ asset('assets/css/vertical-layout-light/style.css')}}">
   <!-- endinject -->
-  <link rel="shortcut icon" href="images/favicon.png" />
+  <link rel="shortcut icon" href="{{ asset('images/favicon.png')}} "/>
 </head>
 <body>
   <div class="container-scroller">
-    <!-- partial:partials/_navbar.html -->
-    <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
+
+    <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row" >
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
         <div class="me-3">
           <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-bs-toggle="minimize">
@@ -35,23 +35,23 @@
         </div>
         <div>
           <a class="navbar-brand brand-logo" href="index.html">
-            <img src="images/logo.svg" alt="logo" />
+            <img src="{{ asset('images/logo.svg')}}" alt="logo" />
           </a>
           <a class="navbar-brand brand-logo-mini" href="index.html">
-            <img src="images/logo-mini.svg" alt="logo" />
+            <img src="{{ asset('images/logo-mini.svg')}}" alt="logo" />
           </a>
         </div>
       </div>
-      <div class="navbar-menu-wrapper d-flex align-items-top">
+      <div class="navbar-menu-wrapper d-flex align-items-top" >
         <ul class="navbar-nav">
 
 
           <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
             <h1 class="welcome-text">Hi, <span class="text-black fw-bold">Ashish</span></h1>
-            <h3 class="welcome-sub-text">Your performance summary this week </h3>
+
           </li>
         </ul>
-        <ul class="navbar-nav ms-auto">
+        <!-- <ul class="navbar-nav ms-auto">
           <li class="nav-item dropdown d-none d-lg-block">
             <a class="nav-link dropdown-bordered dropdown-toggle dropdown-toggle-split" id="messageDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false"> Select Category </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0" aria-labelledby="messageDropdown">
@@ -193,7 +193,7 @@
               <a class="dropdown-item"><i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>Sign Out</a>
             </div>
           </li>
-        </ul>
+        </ul> -->
         <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-bs-toggle="offcanvas">
           <span class="mdi mdi-menu"></span>
         </button>
@@ -374,41 +374,14 @@
       <!-- partial:partials/_sidebar.html -->
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
-
-          <li class="nav-item nav-category">UI Elements</li>
-          <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="collapse"  href="{{ route('videos') }}" aria-expanded="false" aria-controls="ui-basic">
+          <li style="font-size:30px" class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse"  href="{{ route('videos.list') }}" aria-expanded="false" aria-controls="ui-basic">
               <i class="menu-icon mdi mdi-floor-plan"></i>
-              <span class="menu-title">videos</span>
-              <i class="menu-arrow"></i>
+              <span style ="font-size: 20px;" class="menu-title">videos</span>
             </a>
+          </li>
 
-          </li>
-          <li class="nav-item nav-category">Forms and Datas</li>
-          <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
-              <i class="menu-icon mdi mdi-card-text-outline"></i>
-              <span class="menu-title">Form elements</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="form-elements">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"><a class="nav-link" href="pages/forms/basic_elements.html">Basic Elements</a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
-              <i class="menu-icon mdi mdi-chart-line"></i>
-              <span class="menu-title">Charts</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="charts">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/charts/chartjs.html">ChartJs</a></li>
-              </ul>
-            </div>
-          </li>
+
 
         </ul>
       </nav>
@@ -425,13 +398,13 @@
         </div>
         <!-- content-wrapper ends -->
         <!-- partial:partials/_footer.html -->
-        <footer class="footer">
+        <!-- <footer class="footer">
           <div class="d-sm-flex justify-content-center justify-content-sm-between">
             <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Premium <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrap admin template</a> from BootstrapDash.</span>
             <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Copyright © 2021. All rights reserved.</span>
           </div>
         </footer>
-        <!-- partial -->
+        partial -->
       </div>
       <!-- main-panel ends -->
     </div>

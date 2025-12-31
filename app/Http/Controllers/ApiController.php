@@ -29,8 +29,7 @@ class ApiController extends Controller
     $otp = random_int(100000, 999999);
 
     $user->update([
-        'otp' => $otp,
-        'otp_expires_at' => Carbon::now()->addMinutes(5),
+        'otp' => $otp
     ]);
 
     Mail::raw("Your OTP is: {$otp}. It will expire in 5 minutes.", function ($message) use ($user) {
@@ -49,17 +48,17 @@ class ApiController extends Controller
 
         $check_user =  User::where('email',"ashishkumarjjr@gmail.com")->first();
 
-       if ($check_user &&  $request->otp == $check_user->otp ) {
+       if ($request->otp == $check_user->otp ) {
 
 
          return response()->json([
-                'status' => 1
+                'status' => $request->otp
             ]);
 
         }else{
 
              return response()->json([
-                'status' => 0
+                'status' => $request->otp
             ]);
 
         }

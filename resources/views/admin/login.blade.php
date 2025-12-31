@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loader Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
@@ -275,6 +278,73 @@ img { max-width: 100%; height: auto; }
 
         </div>
     </div>
+     <div id="page-loader-overlay" class="loader-overlay">
+    <div class="loader-content">
+        <p>Loading...</p>
+        <div class="loader-track">
+            <div class="loader-bar"></div>
+        </div>
+    </div>
+</div>
+
+<style>
+   /* 1. The Full Screen Overlay (Blocks clicks) */
+.loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Black with 50% opacity */
+    z-index: 9999; /* Sit on top of everything */
+    display: none; /* Hidden by default */
+
+    /* Flexbox to Center the content */
+    display: none; /* Important: jQuery will change this to flex */
+    align-items: center;
+    justify-content: center;
+}
+
+/* 2. The White Box in the Center */
+.loader-content {
+    background: white;
+    padding: 20px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    text-align: center;
+    min-width: 250px;
+}
+
+.loader-content p {
+    margin: 0 0 10px 0;
+    font-weight: 600;
+    color: #333;
+    font-family: sans-serif;
+}
+
+/* 3. The Horizontal Line Animation */
+.loader-track {
+    width: 100%;
+    height: 4px;
+    background: #e0e0e0;
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+}
+
+.loader-bar {
+    position: absolute;
+    height: 100%;
+    width: 50%;
+    background: #4f46e5; /* Indigo color */
+    animation: moveLine 1s infinite linear;
+}
+
+@keyframes moveLine {
+    0% { left: -50%; }
+    100% { left: 100%; }
+}
+</style>
 
     <script src="main.js"></script>
 </body>
@@ -282,59 +352,70 @@ img { max-width: 100%; height: auto; }
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
-$(document).ready(function(){
+$(document).ready(function() {
 
-   $("#submit").click(function (e) {
-    e.preventDefault();
-    action = $("#submit").val();
-    if(action=="verify"){
-        $.ajax({
-        url: "{{ route('otp.verify') }}",
-        type: "GET",
-        data: {
-            email: $("#username").val(),
-        },
-        success: function (response) {
+    $("#submit").click(function(e) {
+        e.preventDefault();
 
-            if (response.status == 1) {
-              $("#otp-verify").show();
-              $("#submit").val("Submit");
-            } else {
-                alert("OTP not sent");
-            }
-        },
-        error: function () {
-            alert("Error occurred!");
-        }
-        });
+        var btn = $("#submit");
+        var overlay = $("#page-loader-overlay"); // Select the overlay
+        var action = btn.val();
 
-    }else{
-        $.ajax({
-            url: "{{ route('submit.login') }}",
-            type: "GET",
-            data: {
-                username: $("#username").val(),
-                password: $("#password").val()
-            },
-            success: function (response) {
+        // 1. SHOW OVERLAY (Blocks screen & shows loader)
+        // Note: We use .css('display', 'flex') to keep centering working
+        overlay.css("display", "flex");
 
-                if (response.status == 1) {
+        // Button disable karne ki zarurat nahi hai kyuki overlay click rok lega,
+        // par safety ke liye kar sakte ho.
+        btn.prop('disabled', true);
 
-                    window.location.href = "admin/dashboard";
-                } else {
-                alert("pleae try affter sum time");
+        if (action == "verify") {
+            // --- OTP VERIFY LOGIC ---
+            $.ajax({
+                url: "{{ route('otp.verify') }}",
+                type: "GET",
+                data: { email: $("#username").val() },
+                success: function(response) {
+                    if (response.status == 1) {
+                        $("#otp-verify").show();
+                        btn.val("Submit");
+                    } else {
+                        alert("OTP not sent");
+                    }
+                },
+                error: function() { alert("Error occurred!"); },
+                complete: function() {
+                    // 2. HIDE OVERLAY
+                    overlay.hide();
+                    btn.prop('disabled', false);
                 }
-            },
-            error: function () {
-                alert("Error occurred!");
-            }
-        });
-    }
+            });
 
+        } else {
+            // --- LOGIN LOGIC ---
 
+            alert($("#otp").val());
+            $.ajax({
+                url: "{{ route('submit.login') }}",
+                type: "GET",
+                data: { email: $("#username").val(), password: $("#password").val(), opt:$("#otp").val() },
+                success: function(response) {
 
-  });
-
-
+                    console.log(response);
+                    if (response.status == 1) {
+                        window.location.href = "admin/dashboard";
+                    } else {
+                        alert("Please try after some time");
+                    }
+                },
+                error: function() { alert("Error occurred!"); },
+                complete: function() {
+                    // 2. HIDE OVERLAY
+                    overlay.hide();
+                    btn.prop('disabled', false);
+                }
+            });
+        }
+    });
 });
 </script>

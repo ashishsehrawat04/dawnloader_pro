@@ -114,10 +114,18 @@ class AdminController extends Controller
     public function Videos(Request $request){
 
             $categories = VideoCategory::pluck('slug', 'id');
-
-            return view('admin.videos', compact('categories'));
-
+            return view('admin.videos-store', compact('categories'));
 
     }
+
+    public function VideosList(Request $request){
+
+         $videos  = Video::all();
+
+
+         return view('admin.videos-list', compact('videos'));
+
+    }
+
 
 }
