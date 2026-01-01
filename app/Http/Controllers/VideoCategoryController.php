@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Video;
+use App\Models\VideoCategory;
 
 class VideoCategoryController extends Controller
 {
@@ -11,6 +12,8 @@ class VideoCategoryController extends Controller
 
         $videos = Video::where("category",$category)->get();
 
-       return view('videos.category', compact('videos'));
+         $category = VideoCategory::all();
+
+       return view('videos.category', compact('videos','category'));
     }
 }

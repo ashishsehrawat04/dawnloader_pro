@@ -288,7 +288,7 @@ img { max-width: 100%; height: auto; }
 </div>
 
 <style>
-   /* 1. The Full Screen Overlay (Blocks clicks) */
+
 .loader-overlay {
     position: fixed;
     top: 0;
@@ -322,7 +322,7 @@ img { max-width: 100%; height: auto; }
     font-family: sans-serif;
 }
 
-/* 3. The Horizontal Line Animation */
+
 .loader-track {
     width: 100%;
     height: 4px;
@@ -336,7 +336,7 @@ img { max-width: 100%; height: auto; }
     position: absolute;
     height: 100%;
     width: 50%;
-    background: #4f46e5; /* Indigo color */
+    background: #4f46e5;
     animation: moveLine 1s infinite linear;
 }
 
@@ -358,15 +358,9 @@ $(document).ready(function() {
         e.preventDefault();
 
         var btn = $("#submit");
-        var overlay = $("#page-loader-overlay"); // Select the overlay
+        var overlay = $("#page-loader-overlay");
         var action = btn.val();
-
-        // 1. SHOW OVERLAY (Blocks screen & shows loader)
-        // Note: We use .css('display', 'flex') to keep centering working
         overlay.css("display", "flex");
-
-        // Button disable karne ki zarurat nahi hai kyuki overlay click rok lega,
-        // par safety ke liye kar sakte ho.
         btn.prop('disabled', true);
 
         if (action == "verify") {
@@ -385,20 +379,20 @@ $(document).ready(function() {
                 },
                 error: function() { alert("Error occurred!"); },
                 complete: function() {
-                    // 2. HIDE OVERLAY
+
                     overlay.hide();
                     btn.prop('disabled', false);
                 }
             });
 
         } else {
-            // --- LOGIN LOGIC ---
+
 
             alert($("#otp").val());
             $.ajax({
                 url: "{{ route('submit.login') }}",
                 type: "GET",
-                data: { email: $("#username").val(), password: $("#password").val(), opt:$("#otp").val() },
+                data: { email: $("#username").val(), password: $("#password").val(), otp:$("#otp").val() },
                 success: function(response) {
 
                     console.log(response);

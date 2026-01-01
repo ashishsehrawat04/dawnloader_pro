@@ -52,13 +52,13 @@ class ApiController extends Controller
 
 
          return response()->json([
-                'status' => $request->otp
+                'status' => 1
             ]);
 
         }else{
 
              return response()->json([
-                'status' => $request->otp
+                'status' => 0
             ]);
 
         }

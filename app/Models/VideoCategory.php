@@ -6,5 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class VideoCategory extends Model
 {
-    //
+    protected $fillable = [
+        'name',
+        'slug',
+        'statis',
+        'icon'
+    ];
 }

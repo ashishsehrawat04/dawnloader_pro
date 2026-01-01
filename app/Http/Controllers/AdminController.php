@@ -37,7 +37,7 @@ class AdminController extends Controller
         try {
 
             // 📁 upload folder
-        $folder = 'uploads/videos';
+            $folder = 'uploads/videos';
 
             $file = $request->file('downloaded_file');
 
@@ -120,12 +120,60 @@ class AdminController extends Controller
 
     public function VideosList(Request $request){
 
-         $videos  = Video::all();
-
-
-         return view('admin.videos-list', compact('videos'));
+        $videos  = Video::all();
+        return view('admin.videos-list', compact('videos'));
 
     }
 
+    public function videoscategoryList(Request $request){
+
+        $VideoCategory  = VideoCategory::all();
+        return view('admin.video-category-list', compact('VideoCategory'));
+    }
+
+    public function Videoscategory(Request $request){
+            return view('admin.video-category-store');
+    }
+
+    public function addVideoscate(Request $request){
+        try {
+
+             if ($request->hasFile('icon')) {
+                $folder = 'uploads/icons';
+                $file = $request->file('icon');
+
+                $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+                $file->move(public_path($folder), $filename);
+
+                $icon = $folder . '/' . $filename;
+            } else {
+                $icon = null;
+            }
+
+
+            VideoCategory::create([
+                "name" =>$request->name,
+                "slug" =>$request->slug,
+                "status" =>$request->status,
+                "icon"  =>$icon
+            ]);
+
+
+            return redirect()
+                ->back()
+                ->with('success', 'Video category  uploaded successfully 🎉');
+
+        } catch (\Exception $e) {
+
+            // ❌ log error (optional)
+            Log::error($e->getMessage());
+
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors(['error' => $e->getMessage()]);
+        }
+    }
 
 }

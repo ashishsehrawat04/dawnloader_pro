@@ -381,6 +381,13 @@
             </a>
           </li>
 
+          <li style="font-size:30px" class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse"  href="{{ route('vid.categorylist') }}" aria-expanded="false" aria-controls="ui-basic">
+              <i class="menu-icon mdi mdi-floor-plan"></i>
+              <span style ="font-size: 20px;" class="menu-title">Category</span>
+            </a>
+          </li>
+
 
 
         </ul>

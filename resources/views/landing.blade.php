@@ -29,7 +29,7 @@
     <!-- NAVBAR -->
     <nav class="bg-white shadow-md fixed w-full z-50">
         <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-indigo-600">VideoDownloader</h1>
+            <h1 class="text-2xl font-bold text-indigo-600">code craft by ashish</h1>
 
             <ul class="hidden md:flex space-x-6 text-lg">
                 <li><a href="#" class="hover:text-indigo-600">Home</a></li>
@@ -152,15 +152,21 @@
                     class="block transform transition duration-300
                             hover:-translate-y-2 hover:shadow-xl focus:-translate-y-2
                             focus:shadow-xl bg-white rounded-xl p-5 border border-gray-200 card"
-                    data-aos="zoom-in">
+                    data-aos="zoom-in" style ="border-color: aqua;">
 
-                        <div class="text-indigo-600 font-bold text-lg">
+                        <div class="font-bold text-lg" style ="color:sienna">
                             {{ $cat['name'] }}
                         </div>
 
-                        <p class="text-gray-500 text-sm mt-2">
-                            {{ $cat['slug'] }}
+                       <p class="text-gray-500 text-sm mt-2 flex justify-center">
+                            @if(!empty($cat->icon))
+                                <img src="{{ asset($cat->icon) }}" alt="icon" width="30">
+                            @endif
                         </p>
+
+
+
+
 
                     </a>
                 @endforeach
@@ -206,7 +212,7 @@ $('#videoDownloadForm').on('submit', function (e) {
     let videoUrl = $('#url-video-download').val();
 
     $.ajax({
-        url: "{{ route('video.url-video-download') }}", // Laravel route
+        url: "{{ route('video.url-video-download') }}",
         type: "POST",
         data: {
             url: videoUrl,
