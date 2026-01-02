@@ -31,6 +31,9 @@ Route::get('/admin/videoscategory-delete', [AdminController::class, 'Videoscated
 Route::post('/admin/add_videoscategory', [AdminController::class, 'addVideoscate'])->name('VideoCategory.store');
 
 Route::get('/api/otp-verify', [ApiController::class, 'sendOtp'])->name('otp.verify');
+Route::POST('/api/user-register', [ApiController::class, 'UserRegister'])->name('user.register');
+Route::POST('/api/user-login', [ApiController::class, 'UserLogin'])->name('user.login');
+
 Route::get('/api/submit', [ApiController::class, 'submitlogin'])->name('submit.login');
 
 Route::get('/video-download', [VideoDownloaderController::class, 'downloadVideo'])->name('video.url-video-download');

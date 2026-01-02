@@ -1,3 +1,5 @@
+
+
 @extends('components.header')
 
 @section('title','dawnload videos')
@@ -256,12 +258,6 @@
 
 
 </div>
-
-
-<!-- download_button -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<meta name="csrf-token" content="{{ csrf_token() }}">
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
 <script>
@@ -276,7 +272,7 @@ $.ajaxSetup({
 
 $(document).ready(function(){
 
-    // 🔽 Download button
+    // DOWNLOAD
     $(document).on('click', '#download_button', function (e) {
         e.preventDefault();
 
@@ -292,68 +288,84 @@ $(document).ready(function(){
         startDownload(videoId, videoUrl);
     });
 
-    // ❌ Close modal
-    $('#closeLoginModal').on('click', function(){
-        $('#loginModal').addClass('hidden').removeClass('flex');
-    });
-
-    // 🔁 Toggle Login / Signup
-    $('#showSignup').on('click', function(){
-        $('#loginBox').addClass('hidden');
-        $('#signupBox').removeClass('hidden');
-    });
-
-    $('#showLogin').on('click', function(){
-        $('#signupBox').addClass('hidden');
-        $('#loginBox').removeClass('hidden');
-    });
-
-    // 🔐 Login
-    $('#loginForm').on('submit', function(e){
+    // LOGIN
+    $(document).on('submit', '#loginForm', function (e) {
         e.preventDefault();
 
-        $.post("/login", $(this).serialize(), function(){
-            afterAuthSuccess();
-        }).fail(function(){
-            alert("Login failed");
+        $.ajax({
+            url: "{{ route('user.login') }}",
+            type: "POST",
+            data: $(this).serialize(),
+            success: function (res) {
+                if (res.status === true) {
+
+                    window.isLoggedIn = true;
+
+                    $('#loginModal').addClass('hidden').removeClass('flex');
+                    $('#loginForm')[0].reset();
+
+                    afterAuthSuccess();
+                }
+            }
         });
     });
 
-    // 🆕 Signup
-    $('#signupForm').on('submit', function(e){
+    // SIGNUP
+    $(document).on('submit', '#signupForm', function (e) {
         e.preventDefault();
 
-        $.post("/register", $(this).serialize(), function(){
-            afterAuthSuccess();
-        }).fail(function(){
-            alert("Signup failed");
+        $.ajax({
+            url: "{{ route('user.register') }}",
+            type: "POST",
+            data: $(this).serialize(),
+            success: function () {
+                $('#signupForm')[0].reset();
+                $('#loginModal').addClass('hidden').removeClass('flex');
+                window.isLoggedIn = true;
+            }
         });
     });
 
 });
 
-// ✅ After login/signup
+// AFTER LOGIN
 function afterAuthSuccess(){
-    window.isLoggedIn = true;
-    $('#loginModal').addClass('hidden').removeClass('flex');
-
     if (pendingDownload) {
         startDownload(pendingDownload.videoId, pendingDownload.videoUrl);
         pendingDownload = null;
     }
 }
 
-// 🔽 Download function
+// DOWNLOAD
 function startDownload(videoId, videoUrl) {
-    $.get("/video/download", { video_id: videoId }, function(){
-        let link = document.createElement('a');
-        link.href = videoUrl;
-        link.download = '';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    });
+    // $.get("/video/download", { video_id: videoId }, function(){
+    //     let link = document.createElement('a');
+    //     link.href = videoUrl;
+    //     link.download = '';
+    //     document.body.appendChild(link);
+    //     link.click();
+    //     document.body.removeChild(link);
+    // });
+
+    // $.ajax({
+    //         url: "{{ route('user.login') }}",
+    //         type: "POST",
+    //         data: {video:id ,
+
+    //         }
+    //         success: function (res) {
+    //             if (res.status === true) {
+
+    //                 window.isLoggedIn = true;
+
+    //                 $('#loginModal').addClass('hidden').removeClass('flex');
+    //                 $('#loginForm')[0].reset();
+
+    //                 afterAuthSuccess();
+    //             }
+    //         }
+    // ~});
+
+
 }
 </script>
-
-@endsection
