@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\DownloadHistory;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ApiController extends Controller
 {
-  public function sendOtp(Request $request)
+    public function sendOtp(Request $request)
     {
         // $request->validate([
         //     'email' => 'required|email'
@@ -75,14 +76,12 @@ class ApiController extends Controller
             'password' => 'required|min:6',
         ]);
 
-
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
                 'errors' => $validator->errors()
             ], 422);
         }
-
 
         $user = User::create([
             'name'     => $request->name,
@@ -133,5 +132,33 @@ class ApiController extends Controller
         ], 200);
     }
 
+    public function downloadhistroy(Request $request){
+
+        $history = DownloadHistory::create([
+            'user_id' => $request->user_id,
+            'file_path'    => $request->videoUrl,
+            'status'     => 1,
+            'url'           =>$request->videoUrl,
+        ]);
+
+        return response()->json([
+            'status'  => true,
+            'message' => 'video downloded successful 🎉',
+        ], 200);
+
+
+    }
+
+    public function downloadData(Request $reqquest){
+
+
+       $history = DownloadHistory::where('user_id', auth()->id())
+                ->latest()
+                ->get();
+
+        return view('videos.download-history', compact('history'));
+
+
+    }
 
 }

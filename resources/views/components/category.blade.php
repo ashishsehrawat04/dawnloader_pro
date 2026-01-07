@@ -1,3 +1,4 @@
+
   <section id="videoCategorySection" class="bg-white py-20">
         <div class="max-w-6xl mx-auto px-6">
 

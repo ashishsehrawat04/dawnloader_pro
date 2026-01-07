@@ -30,9 +30,13 @@ Route::get('/admin/videoscategory-edit', [AdminController::class, 'Videoscateedi
 Route::get('/admin/videoscategory-delete', [AdminController::class, 'Videoscatedestroy'])->name('VideoCategory.destroy');
 Route::post('/admin/add_videoscategory', [AdminController::class, 'addVideoscate'])->name('VideoCategory.store');
 
+
 Route::get('/api/otp-verify', [ApiController::class, 'sendOtp'])->name('otp.verify');
 Route::POST('/api/user-register', [ApiController::class, 'UserRegister'])->name('user.register');
 Route::POST('/api/user-login', [ApiController::class, 'UserLogin'])->name('user.login');
+Route::GET('/api/video-dowonload', [ApiController::class, 'downloadhistroy'])->name('download.history');
+Route::GET('/api/download-data', [ApiController::class, 'downloadData'])->name('download.data');
+
 
 Route::get('/api/submit', [ApiController::class, 'submitlogin'])->name('submit.login');
 

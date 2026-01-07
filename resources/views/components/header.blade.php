@@ -38,8 +38,8 @@
                 <li><a href="#contact" class="hover:text-indigo-600">Contact</a></li>
             </ul>
 
-            <a href="/download" class="hidden md:block bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg">
-                Download Now
+             <a href="{{ route('download.data')}}" class="hidden md:block bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg">
+                Downloads
             </a>
         </div>
     </nav>

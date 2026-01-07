@@ -8,136 +8,95 @@
     {{-- Header --}}
     <div class="mb-6">
         <h2 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            @if($videos->isNotEmpty())
-              <h2 class="text-4xl font-bold text-center mb-12" data-aos="fade-up">
-                    {{ $videos->first()->category }}
-                </h2>
-            @endif
         </h2>
-
-        @if($videos->isNotEmpty())
-            <p class="text-sm text-gray-600 mt-1">
-                {{ $videos->count() }} videos found
-            </p>
-        @endif
     </div>
 
-    {{-- Video Grid --}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8">
+    <div class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200">
+        {{-- Responsive Table Wrapper --}}
+        <div class="overflow-x-auto">
+            <table class="min-w-full leading-normal">
+                <thead>
+                    <tr>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            #
+                        </th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            Video Information
+                        </th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            Download Date
+                        </th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($history as $index => $item)
+                        <tr class="hover:bg-gray-50 transition duration-150">
+                            {{-- Serial Number --}}
+                            <td class="px-5 py-5 border-b border-gray-200 text-sm text-gray-500">
+                                {{ $index + 1 }}
+                            </td>
 
-    @forelse($videos as $video)
-        <div class="flex flex-col group">
+                            {{-- Video Details --}}
+                            <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                <div class="flex items-center">
+                                    <div class="ml-3">
+                                        <!-- <p class="text-gray-900 font-semibold whitespace-no-wrap">
+                                            {{-- Agar Relationship banayi hai to Video Title dikhayein, nahi to ID --}}
+                                            Video ID: {{ $item->video_id ?? 'Unknown' }}
+                                        </p> -->
+                                        <p class="text-gray-500 text-xs mt-1 truncate w-64" title="{{ $item->file_path }}">
+                                            {{ $item->file_path }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </td>
 
-            {{-- Video Box --}}
-            <div class="relative w-full aspect-video bg-gray-900 rounded-xl overflow-hidden shadow-sm group-hover:shadow-md transition-all duration-200">
+                            {{-- Date --}}
+                            <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                <p class="text-gray-900 whitespace-no-wrap">
+                                    {{ $item->created_at->format('d M Y') }}
+                                </p>
+                                <p class="text-gray-500 text-xs">
+                                    {{ $item->created_at->format('h:i A') }}
+                                </p>
+                            </td>
 
-                @php
-                    $videoPath = $video->video;
-                    $isYoutube = false;
-                    $embedUrl = null;
-                    $videoUrl = null;
-
-                    // ✅ Check YouTube
-                    if (str_contains($videoPath, 'youtube.com') || str_contains($videoPath, 'youtu.be')) {
-                        $isYoutube = true;
-                        $urlParts = parse_url($videoPath);
-                        if (isset($urlParts['query'])) {
-                            parse_str($urlParts['query'], $params);
-                            if (isset($params['v'])) {
-                                $embedUrl = 'https://www.youtube.com/embed/' . $params['v'];
-                            }
-                        } else {
-                            $videoId = basename(parse_url($videoPath, PHP_URL_PATH));
-                            $embedUrl = 'https://www.youtube.com/embed/' . $videoId;
-                        }
-                    } else {
-                        // ✅ Local Server Video
-                        $videoUrl = asset($videoPath);
-                    }
-                @endphp
-
-                @if($isYoutube)
-                    <iframe
-                        class="absolute inset-0 w-full h-full"
-                        src="{{ $embedUrl }}"
-                        title="{{ $video->title }}"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen>
-                    </iframe>
-                @else
-                    <video controls class="absolute inset-0 w-full h-full object-cover">
-                        <source src="{{ $videoUrl }}" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                @endif
-
-                <span class="absolute bottom-1 right-1 bg-black/80 text-white text-[10px] font-medium px-1.5 py-0.5 rounded-sm">
-                    {{ $isYoutube ? 'YouTube' : 'Video' }}
-                </span>
-            </div>
-
-            {{-- Video Info --}}
-            <div class="mt-3">
-                <h3 class="text-base font-medium text-gray-900 line-clamp-2 group-hover:text-indigo-600 transition">
-                    <a href="{{ $video->source_url }}" target="_blank">
-                        {{ $video->title }}
-                    </a>
-                </h3>
-
-                <div class="text-sm text-gray-600 mt-1 flex items-center gap-2 flex-wrap">
-                    <span>{{ $video->created_at->diffForHumans() }}</span>
-                    <span class="text-gray-400">•</span>
-
-                    <a href="{{ $video->source_url }}" target="_blank"
-                       class="text-indigo-600 hover:text-indigo-800 text-xs font-semibold uppercase">
-                        Open Source
-                    </a>
-
-                    {{-- ✅ Download Button (Fixed: Changed ID to Class) --}}
-                    @if(!$isYoutube)
-                        <a href="{{ $videoUrl }}"
-                           data-url="{{ $videoUrl }}"
-                           data-video="{{ $video->id }}"
-                           class="download_button ml-auto bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1.5 rounded-md transition cursor-pointer">
-                            ⬇ Download
-                        </a>
-                    @else
-                        <span class="ml-auto text-xs text-gray-400 cursor-not-allowed">
-                            Download disabled
-                        </span>
-                    @endif
-                </div>
-            </div>
-
+                            {{-- Action Buttons --}}
+                            <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                                <a href="{{ $item->file_path }}"
+                                   target="_blank"
+                                   class="inline-flex items-center gap-1 bg-green-100 text-green-700 hover:bg-green-200 px-3 py-1.5 rounded-md text-xs font-bold transition">
+                                    <span>Download / View</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                    </svg>
+                                </a>
+                            </td>
+                        </tr>
+                    @empty
+                        {{-- Empty State --}}
+                        <tr>
+                            <td colspan="4" class="px-5 py-12 border-b border-gray-200 bg-white text-center">
+                                <div class="flex flex-col items-center justify-center text-gray-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mb-4 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <p class="text-lg font-medium text-gray-500">No download history found.</p>
+                                    <p class="text-sm mt-1">Start downloading videos to see them here.</p>
+                                    <a href="{{ url('/') }}" class="mt-4 text-indigo-600 hover:text-indigo-800 font-semibold text-sm">
+                                        Browse Videos &rarr;
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
-    @empty
-        <div class="col-span-full flex flex-col items-center justify-center py-32 text-gray-500">
-            <p class="text-xl font-medium">No videos found</p>
-        </div>
-    @endforelse
-
     </div>
-
-    {{-- Category Section --}}
-    <section id="videoCategorySection" class="bg-white mt-12">
-        <div class="max-w-6xl mx-auto px-6">
-            <h2 class="text-4xl font-bold text-center mb-12" data-aos="fade-up">Categories</h2>
-            <div class="grid md:grid-cols-6 gap-6 text-center">
-                @foreach ($category as $cat)
-                    @php $isSelected = request()->segment(2) === $cat->slug; @endphp
-                    <a href="{{ url('category/' . $cat->slug) }}"
-                    class="block transform transition duration-300 hover:-translate-y-2 hover:shadow-xl rounded-xl p-5 border card {{ $isSelected ? 'bg-green-100 border-green-500 shadow-xl' : 'bg-white border-gray-200' }}"
-                    style="border-color: aqua;">
-                        <div class="font-bold text-lg" style="color:sienna">{{ $cat->name }}</div>
-                        <p class="text-gray-500 text-sm mt-2 flex justify-center">
-                            @if(!empty($cat->icon)) <img src="{{ asset($cat->icon) }}" alt="icon" width="30"> @endif
-                        </p>
-                    </a>
-                @endforeach
-            </div>
-        </div>
-    </section>
 
     {{-- MODAL STRUCTURE --}}
     <div id="loginModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
@@ -178,6 +137,7 @@
 
         </div>
     </div>
+
 
 </div>
 
